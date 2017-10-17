@@ -38,7 +38,11 @@ client.on('message', message => {
             message.member.voiceChannel.join();
         }
 
-        if (split[0] === '%disconnect') {
+        if (split[0] === '%list') {
+            message.member.sendMessage('```Here is a list of all of the available commands:\n\n%quack\n%tequila\n%relax\n%nervous\n%horn\n%go\n%ready\n%turn\n%why\n%slut\n%gtahorn\n%wow\n%grin```')
+        }
+
+        if (split[0] === '%disconnect' || split[0] === '%stop') {
             client.voiceConnections.forEach(connection => {
                 connection.disconnect();
             })
@@ -47,7 +51,19 @@ client.on('message', message => {
         if (split[0] === '%quack') {
             playSound(message, 'quack')
         }
-        
+
+        if (split[0] === '%tequila') {
+            playSound(message, 'tequila')
+        }
+
+        if (split[0] === '%grin') {
+            playSound(message, 'grin')
+        }
+
+        if (split[0] === '%wow') {
+            playSound(message, 'wow')
+        }
+
         if (split[0] === '%relax') {
             playSound(message, 'relax')
         }
@@ -78,6 +94,10 @@ client.on('message', message => {
 
         if (split[0] === '%slut') {
             playSound(message, 'slut')
+        }
+
+        if (split[0] === '%gtahorn') {
+            playSound(message, 'gtahorn')
         }
     }
 })
