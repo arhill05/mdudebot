@@ -2,6 +2,11 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./bot-config.json');
 
+const availableSounds = ['go', 'grin', 'gtahorn', 'nervous',
+    'quack', 'ready', 'relax', 'slut',
+    'tequila', 'turn', 'why', 'wow'
+]
+
 disconnect = () => {
     client.voiceConnections.forEach(connection => {
         connection.disconnect();
@@ -9,14 +14,17 @@ disconnect = () => {
 }
 
 playSound = (message, soundName) => {
-    message.member.voiceChannel.join().then(connection => {
-        const broadcast = client.createVoiceBroadcast();
-        broadcast.playFile(soundName + '.mp3');
-        connection.playBroadcast(broadcast);
-        broadcast.on('end', () => {
-            connection.disconnect();
+    if (availableSounds.indexOf(soundName) > -1) {
+        console.log('playing sound ' + soundName)
+        message.member.voiceChannel.join().then(connection => {
+            const broadcast = client.createVoiceBroadcast();
+            broadcast.playFile(soundName + '.mp3');
+            connection.playBroadcast(broadcast);
+            broadcast.on('end', () => {
+                connection.disconnect();
+            })
         })
-    })
+    }
 }
 
 client.on('ready', () => {
@@ -30,74 +38,34 @@ client.on('message', message => {
 });
 
 client.on('message', message => {
-    const split = message.content.split(' ');
-    if (split[0][0] === '%' && !message.member.voiceChannel) {
+    const splitMessage = message.content.split(' ');
+    if (splitMessage[0][0] === '%' && !message.member.voiceChannel) {
         message.channel.send('Hmm... It seems that you are not in a voice channel. You must be in a voice channel to use this command!');
     } else {
-        if (split[0] === '%connect') {
+        if (splitMessage[0] === '%connect') {
             message.member.voiceChannel.join();
         }
 
-        if (split[0] === '%list') {
+        else if (splitMessage[0] === '%list') {
+            let list = '```Here is a list of all of the available commands:';
+            availableSounds.forEach((sound, index, array) => {
+                list += index != array.length - 1 ? ` ${sound},` : `${sound}.`
+            });
+            list += '```'
             message.member.sendMessage('```Here is a list of all of the available commands:\n\n%quack\n%tequila\n%relax\n%nervous\n%horn\n%go\n%ready\n%turn\n%why\n%slut\n%gtahorn\n%wow\n%grin```')
         }
 
-        if (split[0] === '%disconnect' || split[0] === '%stop') {
+        else if (splitMessage[0] === '%disconnect' || splitMessage[0] === '%stop') {
             client.voiceConnections.forEach(connection => {
                 connection.disconnect();
             })
         }
 
-        if (split[0] === '%quack') {
-            playSound(message, 'quack')
-        }
-
-        if (split[0] === '%tequila') {
-            playSound(message, 'tequila')
-        }
-
-        if (split[0] === '%grin') {
-            playSound(message, 'grin')
-        }
-
-        if (split[0] === '%wow') {
-            playSound(message, 'wow')
-        }
-
-        if (split[0] === '%relax') {
-            playSound(message, 'relax')
-        }
-
-        if (split[0] === '%nervous') {
-            playSound(message, 'nervous')
-        }
-
-        if (split[0] === '%horn') {
-            playSound(message, 'horn')
-        }
-
-        if (split[0] === '%go') {
-            playSound(message, 'go')
-        }
-
-        if (split[0] === '%ready') {
-            playSound(message, 'ready')
-        }
-
-        if (split[0] === '%turn') {
-            playSound(message, 'turn')
-        }
-
-        if (split[0] === '%why') {
-            playSound(message, 'why')
-        }
-
-        if (split[0] === '%slut') {
-            playSound(message, 'slut')
-        }
-
-        if (split[0] === '%gtahorn') {
-            playSound(message, 'gtahorn')
+        else {
+            console.log(splitMessage);
+            let soundName = splitMessage[0].split('%');
+            console.log(soundName);
+            playSound(message, soundName[1])
         }
     }
 })
