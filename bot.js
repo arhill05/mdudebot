@@ -44,7 +44,9 @@ playSound = (message, soundName) => {
 
 client.on('ready', () => {
     console.log('I am ready!');
-    client.user.setGame('with my penis');
+    client
+        .user
+        .setGame('with my penis');
 })
 
 client.on('message', async message => {
@@ -77,14 +79,15 @@ client.on('message', async message => {
             let list = '```Here is a list of all of the available commands:';
             availableSounds.forEach((sound, index, array) => {
                 list += index != array.length - 1
-                    ? ` ${sound},`
-                    : `${sound}.`
+                    ? `\n%${sound}`
+                    : `\n%${sound}`
             });
+            list += '```';
             message
                 .member
                 .sendMessage(list);
         }
-    } else {
+
         playSound(message, command);
     }
 })
