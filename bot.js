@@ -2,103 +2,90 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const config = require('./bot-config.json');
 
+const availableSounds = [
+    'go',
+    'grin',
+    'gtahorn',
+    'nervous',
+    'quack',
+    'ready',
+    'relax',
+    'slut',
+    'tequila',
+    'turn',
+    'why',
+    'wow',
+    'horn'
+]
+const prefix = '%';
+
 disconnect = () => {
-    client.voiceConnections.forEach(connection => {
-        connection.disconnect();
-    })
+    client
+        .voiceConnections
+        .forEach(connection => {
+            connection.disconnect();
+        })
 }
 
 playSound = (message, soundName) => {
-    message.member.voiceChannel.join().then(connection => {
-        const broadcast = client.createVoiceBroadcast();
-        broadcast.playFile(soundName + '.mp3');
-        connection.playBroadcast(broadcast);
-        broadcast.on('end', () => {
-            connection.disconnect();
+    if (availableSounds.indexOf(soundName) < 0)
+        return;
+    message
+        .member
+        .voiceChannel
+        .join()
+        .then(connection => {
+            const stream = connection.playFile(soundName + '.mp3');
+            stream.on('end', () => {
+                connection.disconnect()
+            });
         })
-    })
 }
 
 client.on('ready', () => {
     console.log('I am ready!');
+    client.user.setGame('with my penis');
 })
 
-client.on('message', message => {
-    if (message.content === 'ping') {
-        message.reply('pong');
-    }
-});
+client.on('message', async message => {
+    if (message.author.username !== client.user.username) {
+        const args = message
+            .content
+            .slice(1)
+            .trim()
+            .split(/ +/g);
+        const command = args
+            .shift()
+            .toLowerCase();
 
-client.on('message', message => {
-    const split = message.content.split(' ');
-    if (split[0][0] === '%' && !message.member.voiceChannel) {
-        message.channel.send('Hmm... It seems that you are not in a voice channel. You must be in a voice channel to use this command!');
+        if (command === "ping") {
+            const m = await message
+                .channel
+                .send("Ping?");
+            m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+        }
+
+        if (command === "disconnect" || command === "stop") {
+            client
+                .voiceConnections
+                .forEach(connection => {
+                    connection.disconnect();
+                })
+        }
+
+        if (command === "list") {
+            let list = '```Here is a list of all of the available commands:';
+            availableSounds.forEach((sound, index, array) => {
+                list += index != array.length - 1
+                    ? ` ${sound},`
+                    : `${sound}.`
+            });
+            message
+                .member
+                .sendMessage(list);
+        }
     } else {
-        if (split[0] === '%connect') {
-            message.member.voiceChannel.join();
-        }
-
-        if (split[0] === '%list') {
-            message.member.sendMessage('```Here is a list of all of the available commands:\n\n%quack\n%tequila\n%relax\n%nervous\n%horn\n%go\n%ready\n%turn\n%why\n%slut\n%gtahorn\n%wow\n%grin```')
-        }
-
-        if (split[0] === '%disconnect' || split[0] === '%stop') {
-            client.voiceConnections.forEach(connection => {
-                connection.disconnect();
-            })
-        }
-
-        if (split[0] === '%quack') {
-            playSound(message, 'quack')
-        }
-
-        if (split[0] === '%tequila') {
-            playSound(message, 'tequila')
-        }
-
-        if (split[0] === '%grin') {
-            playSound(message, 'grin')
-        }
-
-        if (split[0] === '%wow') {
-            playSound(message, 'wow')
-        }
-
-        if (split[0] === '%relax') {
-            playSound(message, 'relax')
-        }
-
-        if (split[0] === '%nervous') {
-            playSound(message, 'nervous')
-        }
-
-        if (split[0] === '%horn') {
-            playSound(message, 'horn')
-        }
-
-        if (split[0] === '%go') {
-            playSound(message, 'go')
-        }
-
-        if (split[0] === '%ready') {
-            playSound(message, 'ready')
-        }
-
-        if (split[0] === '%turn') {
-            playSound(message, 'turn')
-        }
-
-        if (split[0] === '%why') {
-            playSound(message, 'why')
-        }
-
-        if (split[0] === '%slut') {
-            playSound(message, 'slut')
-        }
-
-        if (split[0] === '%gtahorn') {
-            playSound(message, 'gtahorn')
-        }
+        playSound(message, command);
     }
 })
 
