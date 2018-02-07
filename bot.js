@@ -23,7 +23,6 @@ const availableSounds = [
     'uganda',
     'rip'
 ]
-const prefix = '%';
 
 disconnect = () => {
     client
