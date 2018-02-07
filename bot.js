@@ -15,7 +15,13 @@ const availableSounds = [
     'turn',
     'why',
     'wow',
-    'horn'
+    'horn',
+    'alert',
+    'snakelong',
+    'snaake',
+    'realestate',
+    'uganda',
+    'rip'
 ]
 const prefix = '%';
 
@@ -51,6 +57,8 @@ client.on('ready', () => {
 
 client.on('message', async message => {
     if (message.author.username !== client.user.username) {
+        const prefix = message.content.charAt(0);
+        if (prefix !== config.prefix) return;
         const args = message
             .content
             .slice(1)
@@ -78,9 +86,9 @@ client.on('message', async message => {
         if (command === "list") {
             let list = '```Here is a list of all of the available commands:';
             availableSounds.forEach((sound, index, array) => {
-                list += index != array.length - 1
-                    ? `\n%${sound}`
-                    : `\n%${sound}`
+                list += index != array.length - 1 ?
+                    `\n%${sound}` :
+                    `\n%${sound}`
             });
             list += '```';
             message
