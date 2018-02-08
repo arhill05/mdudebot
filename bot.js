@@ -4,6 +4,9 @@ const config = require('./bot-config.json');
 
 const availableSounds = [
     'go',
+    'go2',
+    'dingus',
+    'fucked',
     'grin',
     'gtahorn',
     'nervous',
@@ -21,7 +24,8 @@ const availableSounds = [
     'snaake',
     'realestate',
     'uganda',
-    'rip'
+    'rip',
+    'doubtit'
 ]
 
 disconnect = () => {
