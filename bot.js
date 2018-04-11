@@ -33,7 +33,8 @@ const availableSounds = [
   'rasputin',
   'wtf',
   'wtfreverb',
-  'nimbus'
+  'nimbus',
+  'nope'
 ];
 
 disconnect = () => {
