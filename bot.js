@@ -67,10 +67,11 @@ client.on('message', async message => {
     if (
       (Number(message.author.id) == 103591900732231680 ||
         Number(message.author.id) == 71386725435310080) &&
-      message.content.indexOf(':partyparrot:') > -1
+      message.content.indexOf('partyparrot') > -1
     ) {
+      console.log(message.content);
       message.channel.send(
-        'https://cdn.discordapp.com/emojis/393919489533673492.gif?v=1'
+        '<a:aussieparrot:432866431659540482>'
       );
     }
     const prefix = message.content.charAt(0);

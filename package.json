@@ -5,8 +5,8 @@
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start bot.js -x max -name=\"bot\"",
-    "restart": "pm2 restart bot"
+    "start": "pm2 start bot.js -x max -name=\"mdudebot\"",
+    "restart": "pm2 restart mdudebot"
   },
   "author": "",
   "license": "ISC",
