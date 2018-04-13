@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const config = require('./bot-config.json');
+const config = require('./config.json');
+const axios = require('axios');
 
 const availableSounds = [
   'go',
@@ -43,6 +44,42 @@ disconnect = () => {
   });
 };
 
+exports.sendCodeshipBuildNotification = async buildPayload => {
+  const build = buildPayload.build;
+  const status = build.status;
+  const url = config.discordWebhookUrl;
+
+  const data = {
+    embeds: [
+      {
+        title: `${build.project_full_name} build ${status}`,
+        author: {
+          name: 'Codeship',
+          icon_url:
+            'https://pbs.twimg.com/profile_images/884879047062323200/6PI7jOx0_400x400.jpg'
+        },
+        color:
+          status === 'error' ? parseInt('ff2100', 16) : parseInt('00ba31', 16),
+        description: `Codeship build id ${build.build_id} has a status of ${
+          build.status
+        }.\n\n\[${build.short_commit_id}](<${build.commit_url}>)\ ${
+          build.message
+        } by ${build.committer}`,
+        url: `${build.build_url}`
+      }
+    ]
+  };
+
+  console.log(data);
+
+  try {
+    const response = await axios.post(url, data);
+  } catch (err) {
+    //console.log(err);
+  }
+  return data;
+};
+
 playSound = (message, soundName) => {
   if (availableSounds.indexOf(soundName) < 0) return;
   const channel = message.member.voiceChannel;
@@ -70,9 +107,7 @@ client.on('message', async message => {
       message.content.indexOf('partyparrot') > -1
     ) {
       console.log(message.content);
-      message.channel.send(
-        '<a:aussieparrot:432866431659540482>'
-      );
+      message.channel.send('<a:aussieparrot:432866431659540482>');
     }
     const prefix = message.content.charAt(0);
     if (prefix !== config.prefix) return;
