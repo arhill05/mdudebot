@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const config = require('./config.json');
 const axios = require('axios');
 
-const availableSounds = [
+let availableSounds = [
   'go',
   'go2',
   'dingus',
@@ -35,7 +35,8 @@ const availableSounds = [
   'wtf',
   'wtfreverb',
   'nimbus',
-  'nope'
+  'nope',
+  'awfuck'
 ];
 
 disconnect = () => {
@@ -135,6 +136,11 @@ client.on('message', async message => {
 
     if (command === 'list') {
       let list = '```Here is a list of all of the available commands:';
+      availableSounds = availableSounds.sort((a, b) => {
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      });
       availableSounds.forEach((sound, index, array) => {
         list += index != array.length - 1 ? `\n%${sound}` : `\n%${sound}`;
       });
