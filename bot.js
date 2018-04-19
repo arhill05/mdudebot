@@ -36,7 +36,8 @@ let availableSounds = [
   'wtfreverb',
   'nimbus',
   'nope',
-  'awfuck'
+  'awfuck',
+  'stop'
 ];
 
 disconnect = () => {
