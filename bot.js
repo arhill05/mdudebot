@@ -37,7 +37,7 @@ let availableSounds = [
   'nimbus',
   'nope',
   'awfuck',
-  'stop'
+  'stopthatsgay'
 ];
 
 disconnect = () => {
@@ -82,9 +82,9 @@ exports.sendCodeshipBuildNotification = async buildPayload => {
   return data;
 };
 
-playSound = (message, soundName) => {
+playSound = (message, soundName, voiceChannel) => {
   if (availableSounds.indexOf(soundName) < 0) return;
-  const channel = message.member.voiceChannel;
+  let channel = voiceChannel ? voiceChannel : message.member.voiceChannel;
 
   if (channel && channel !== null) {
     channel.join().then(connection => {
@@ -118,6 +118,10 @@ client.on('message', async message => {
       .trim()
       .split(/ +/g);
     const command = args.shift().toLowerCase();
+    const firstParam = args.shift();
+    let voiceChannel = null;
+    if (firstParam === '-c' && isParonityOrMdude(message.author.id))
+      voiceChannel = message.guild.channels.find('name', args.join(' '));
 
     if (command === 'ping') {
       const m = await message.channel.send('Ping?');
@@ -149,8 +153,12 @@ client.on('message', async message => {
       message.member.sendMessage(list);
     }
 
-    playSound(message, command);
+    playSound(message, command, voiceChannel);
   }
 });
+
+isParonityOrMdude = id => {
+  return Number(id) == 103591900732231680 || Number(id) == 71386725435310080;
+};
 
 client.login(config.botKey);
