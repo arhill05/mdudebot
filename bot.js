@@ -38,7 +38,8 @@ let availableSounds = [
   'nope',
   'awfuck',
   'stopthatsgay',
-  'heya'
+  'heya',
+  'trains'
 ];
 
 disconnect = () => {
