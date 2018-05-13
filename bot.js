@@ -26,25 +26,7 @@ let availableSounds = [
   'realestate',
   'uganda',
   'rip',
-  'doubtit',
-  'notfine',
-  'numb',
-  'levelup',
-  'wtfboom',
-  'rasputin',
-  'wtf',
-  'wtfreverb',
-  'nimbus',
-  'nope',
-  'awfuck',
-  'stopthatsgay',
-  'heya',
-  'trains',
-  'vaginas',
-  'runed',
-  'golddick',
-  'poop',
-  'poopslow'
+  'doubtit'
 ];
 
 disconnect = () => {
@@ -79,8 +61,6 @@ exports.sendCodeshipBuildNotification = async buildPayload => {
     ]
   };
 
-  console.log(data);
-
   try {
     const response = await axios.post(url, data);
   } catch (err) {
@@ -95,7 +75,10 @@ playSound = (message, soundName, voiceChannel) => {
 
   if (channel && channel !== null) {
     channel.join().then(connection => {
-      const stream = connection.playFile(soundName + '.mp3');
+      const stream = connection.playFile(soundName + '.mp3', (err, intent) => {
+        if (err) console.log(err);
+        console.log(intent);
+      });
       stream.on('end', () => {
         connection.disconnect();
       });
@@ -111,11 +94,9 @@ client.on('ready', () => {
 client.on('message', async message => {
   if (message.author.username !== client.user.username) {
     if (
-      (Number(message.author.id) == 103591900732231680 ||
-        Number(message.author.id) == 71386725435310080) &&
+      isParonityOrMdude(message.author.id) &&
       message.content.indexOf('partyparrot') > -1
     ) {
-      console.log(message.content);
       message.channel.send('<a:aussieparrot:432866431659540482>');
     }
     const prefix = message.content.charAt(0);
