@@ -54,7 +54,7 @@ exports.sendBitbucketNotification = async bitbucketPayload => {
           icon_url:
             'https://sdtimes.com/wp-content/uploads/2016/07/0722.sdt-atlassian.png'
         },
-        color: parseInt('#0000FF', 16),
+        color: parseInt('0000FF', 16),
         description: description,
         url: `${changes.links.html.href}`
       }
