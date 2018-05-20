@@ -40,9 +40,10 @@ exports.sendBitbucketNotification = async bitbucketPayload => {
   const commits = changes.commits;
   let description = '';
   commits.forEach(commit => {
-    description += `${commit.message} by ${commit.author.raw}`;
+    description += `${commit.message}`;
     description += '\n';
   });
+  description += bitbucketPayload.actor.username
   const url = config.discordBitbucketWebhookUrl;
 
   const data = {
