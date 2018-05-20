@@ -13,6 +13,11 @@ app.post('/buildNotification', (req, res) => {
     res.send(resp);
 })
 
+app.post('/bitbucketNotification', (req, res) => {
+    let resp = bot.sendCodeshipBuildNotification(req.body);
+    res.send(resp);
+})
+
 const port = config.port || '3000';
 app.set('port', port);
 

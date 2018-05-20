@@ -35,6 +35,40 @@ disconnect = () => {
   });
 };
 
+exports.sendBitbucketNotification = async bitbucketPayload => {
+  const changes = bitbucketPayload.push.changes[0];
+  const commits = changes.commits;
+  let description = '';
+  commits.forEach(commit => {
+    description += `${commit.message} by ${commit.author.raw}`;
+    description += '\n';
+  });
+  const url = config.discordWebhookUrl;
+
+  const data = {
+    embeds: [
+      {
+        title: `Bitbucket Push`,
+        author: {
+          name: 'BitBucket',
+          icon_url:
+            'https://sdtimes.com/wp-content/uploads/2016/07/0722.sdt-atlassian.png'
+        },
+        color: parseInt('#0000FF', 16),
+        description: description,
+        url: `${changes.links.html.href}`
+      }
+    ]
+  };
+
+  try {
+    const response = await axios.post(url, data);
+  } catch (err) {
+    //console.log(err);
+  }
+  return data;
+};
+
 exports.sendCodeshipBuildNotification = async buildPayload => {
   const build = buildPayload.build;
   const status = build.status;
