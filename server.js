@@ -14,7 +14,7 @@ app.post('/buildNotification', (req, res) => {
 })
 
 app.post('/bitbucketNotification', (req, res) => {
-    let resp = bot.sendCodeshipBuildNotification(req.body);
+    let resp = bot.sendBitbucketNotification(req.body);
     res.send(resp);
 })
 
