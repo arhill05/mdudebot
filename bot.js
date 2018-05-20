@@ -43,7 +43,7 @@ exports.sendBitbucketNotification = async bitbucketPayload => {
     description += `${commit.message} by ${commit.author.raw}`;
     description += '\n';
   });
-  const url = config.discordWebhookUrl;
+  const url = config.discordBitbucketWebhookUrl;
 
   const data = {
     embeds: [
