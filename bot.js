@@ -30,17 +30,39 @@ let availableSounds = [
 ];
 
 disconnect = () => {
-  client.voiceConnections.forEach(connection => {
-    connection.disconnect();
-  });
+  client
+    .voiceConnections
+    .forEach(connection => {
+      connection.disconnect();
+    });
 };
 
 exports.sendBitbucketNotification = async bitbucketPayload => {
-  const changes = bitbucketPayload.push.changes[0];
-  const commits = changes.commits;
+  const changeHashes = [],
+    changes = bitbucketPayload.changes,
+    projectSlug = bitbucketPayload.repository.slug,
+    projectKey = bitbucketPayload.repository.project.key;
   let description = '';
-  commits.forEach(commit => {
-    description += `${commit.message}`;
+  changes.forEach(change => {
+    changeHashes.push(change.toHash);
+  });
+
+  let url = `${config.baseApiUrl}projects/${projectKey}/repos/${projectSlug}/commits/`;
+
+  let commitMessages = changeHashes.map(hash => {
+    let response = await axios({
+      method: 'get',
+      url: url + hash,
+      auth: {
+        username: config.apiUser,
+        password: config.apiPass
+      }
+    });
+    return response.data.message;
+  });
+
+  commitMessages.forEach(message => {
+    description += `${message}`;
     description += '\n';
   });
   description += bitbucketPayload.actor.username
@@ -52,8 +74,7 @@ exports.sendBitbucketNotification = async bitbucketPayload => {
         title: `Bitbucket Push`,
         author: {
           name: 'BitBucket',
-          icon_url:
-            'https://sdtimes.com/wp-content/uploads/2016/07/0722.sdt-atlassian.png'
+          icon_url: 'https://sdtimes.com/wp-content/uploads/2016/07/0722.sdt-atlassian.png'
         },
         color: parseInt('0000FF', 16),
         description: description,
@@ -81,16 +102,12 @@ exports.sendCodeshipBuildNotification = async buildPayload => {
         title: `${build.project_full_name} build ${status}`,
         author: {
           name: 'Codeship',
-          icon_url:
-            'https://pbs.twimg.com/profile_images/884879047062323200/6PI7jOx0_400x400.jpg'
+          icon_url: 'https://pbs.twimg.com/profile_images/884879047062323200/6PI7jOx0_400x400.jpg'
         },
-        color:
-          status === 'error' ? parseInt('ff2100', 16) : parseInt('00ba31', 16),
-        description: `Codeship build id ${build.build_id} has a status of ${
-          build.status
-        }.\n\n\[${build.short_commit_id}](<${build.commit_url}>)\ ${
-          build.message
-        } by ${build.committer}`,
+        color: status === 'error'
+          ? parseInt('ff2100', 16)
+          : parseInt('00ba31', 16),
+        description: `Codeship build id ${build.build_id} has a status of ${build.status}.\n\n\[${build.short_commit_id}](<${build.commit_url}>)\ ${build.message} by ${build.committer}`,
         url: `${build.build_url}`
       }
     ]
@@ -105,75 +122,93 @@ exports.sendCodeshipBuildNotification = async buildPayload => {
 };
 
 playSound = (message, soundName, voiceChannel) => {
-  if (availableSounds.indexOf(soundName) < 0) return;
-  let channel = voiceChannel ? voiceChannel : message.member.voiceChannel;
+  if (availableSounds.indexOf(soundName) < 0)
+    return;
+  let channel = voiceChannel
+    ? voiceChannel
+    : message.member.voiceChannel;
 
   if (channel && channel !== null) {
-    channel.join().then(connection => {
-      const stream = connection.playFile(soundName + '.mp3', (err, intent) => {
-        if (err) console.log(err);
-        console.log(intent);
+    channel
+      .join()
+      .then(connection => {
+        const stream = connection.playFile(soundName + '.mp3', (err, intent) => {
+          if (err)
+            console.log(err);
+          console.log(intent);
+        });
+        stream.on('end', () => {
+          connection.disconnect();
+        });
       });
-      stream.on('end', () => {
-        connection.disconnect();
-      });
-    });
   }
 };
 
 client.on('ready', () => {
   console.log('I am ready!');
-  client.user.setGame('with my penis');
+  client
+    .user
+    .setGame('with my penis');
 });
 
 client.on('message', async message => {
   if (message.author.username !== client.user.username) {
-    if (
-      isParonityOrMdude(message.author.id) &&
-      message.content.indexOf('partyparrot') > -1
-    ) {
-      message.channel.send('<a:aussieparrot:432866431659540482>');
+    if (isParonityOrMdude(message.author.id) && message.content.indexOf('partyparrot') > -1) {
+      message
+        .channel
+        .send('<a:aussieparrot:432866431659540482>');
     }
-    const prefix = message.content.charAt(0);
-    if (prefix !== config.prefix) return;
-    const args = message.content
+    const prefix = message
+      .content
+      .charAt(0);
+    if (prefix !== config.prefix)
+      return;
+    const args = message
+      .content
       .slice(1)
       .trim()
       .split(/ +/g);
-    const command = args.shift().toLowerCase();
+    const command = args
+      .shift()
+      .toLowerCase();
     const firstParam = args.shift();
     let voiceChannel = null;
     if (firstParam === '-c' && isParonityOrMdude(message.author.id))
       voiceChannel = message.guild.channels.find('name', args.join(' '));
 
     if (command === 'ping') {
-      const m = await message.channel.send('Ping?');
-      m.edit(
-        `Pong! Latency is ${m.createdTimestamp -
-          message.createdTimestamp}ms. API Latency is ${Math.round(
-          client.ping
-        )}ms`
-      );
+      const m = await message
+        .channel
+        .send('Ping?');
+      m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
     }
 
     if (command === 'disconnect' || command === 'stop') {
-      client.voiceConnections.forEach(connection => {
-        connection.disconnect();
-      });
+      client
+        .voiceConnections
+        .forEach(connection => {
+          connection.disconnect();
+        });
     }
 
     if (command === 'list') {
       let list = '```Here is a list of all of the available commands:';
       availableSounds = availableSounds.sort((a, b) => {
-        if (a < b) return -1;
-        if (a > b) return 1;
+        if (a < b)
+          return -1;
+        if (a > b)
+          return 1;
         return 0;
       });
       availableSounds.forEach((sound, index, array) => {
-        list += index != array.length - 1 ? `\n%${sound}` : `\n%${sound}`;
+        list += index != array.length - 1
+          ? `\n%${sound}`
+          : `\n%${sound}`;
       });
       list += '```';
-      message.member.sendMessage(list);
+      message
+        .member
+        .sendMessage(list);
     }
 
     playSound(message, command, voiceChannel);
