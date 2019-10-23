@@ -1,7 +1,10 @@
 {
-    "botKey":"MzQyMDkyODMxMjc3NzExMzYw.DGKmTQ.yiwm9HWOUrtbebvA-0nJGFhz96E",
-    "prefix":"%",
-    "port":"3005",
-    "discordWebhookUrl":"https://discordapp.com/api/webhooks/434458801849106442/UKW5rpUsjaAChtQIfrrkFOk5BLPu3ZV3DaJddc9d6_6RVeUIsEzHCUGcQ-oN_wHJbceD",
-    "discordBitbucketWebhookUrl":"https://discordapp.com/api/webhooks/447878418185453578/7kPXWaL6TfPq35MYG-mxaWMCwSbAGfWiyXXJrChGThoHs6Q3C_NJ5RXku5FFHd5lhSSw"
+  "botKey": "MzQyMDkyODMxMjc3NzExMzYw.DlIbgQ.hfHHRe3fpoTwu8JBprGTN-34Tn0",
+  "prefix": "%",
+  "port": "3005",
+  "discordWebhookUrl": "https://discordapp.com/api/webhooks/434458801849106442/UKW5rpUsjaAChtQIfrrkFOk5BLPu3ZV3DaJddc9d6_6RVeUIsEzHCUGcQ-oN_wHJbceD",
+  "discordBitbucketWebhookUrl": "https://discordapp.com/api/webhooks/447878418185453578/7kPXWaL6TfPq35MYG-mxaWMCwSbAGfWiyXXJrChGThoHs6Q3C_NJ5RXku5FFHd5lhSSw",
+  "apiUser": "apiUser",
+  "apiPass": "dickbutt",
+  "baseApiUrl":"http://code.elementumgaming.com:7990/rest/api/1.0/"
 }
