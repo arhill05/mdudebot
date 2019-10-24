@@ -4,6 +4,7 @@ const config = require("./config.json");
 const axios = require("axios");
 const path = require('path');
 global.discordClient = client;
+const yt = require('./commands/yt');
 const sfx = require('./commands/sfx');
 const disconnect = require('./commands/disconnect');
 const list = require('./commands/list');
@@ -34,6 +35,8 @@ processCommand = async (message) => {
   if (firstParam === "-c")
     voiceChannel = message.guild.channels.find("name", args.join(" "));
 
+  voiceChannel = voiceChannel ? voiceChannel : message.member.voice.channel;
+
   switch (command) {
     case 'disconnect':
     case 'stop':
@@ -41,6 +44,9 @@ processCommand = async (message) => {
       break;
     case 'list':
       await list(message);
+      break;
+    case 'yt':
+      await yt(voiceChannel, firstParam)
       break;
     default:
       try {
