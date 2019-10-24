@@ -5,6 +5,7 @@ const axios = require("axios");
 const path = require('path');
 global.discordClient = client;
 const yt = require('./commands/yt');
+const addSfx = require('./commands/addsfx');
 const sfx = require('./commands/sfx');
 const disconnect = require('./commands/disconnect');
 const list = require('./commands/list');
@@ -37,7 +38,7 @@ processCommand = async (message) => {
 
   voiceChannel = voiceChannel ? voiceChannel : message.member.voice.channel;
 
-  switch (command) {
+  switch (command.toLowerCase()) {
     case 'disconnect':
     case 'stop':
       disconnect();
@@ -47,6 +48,10 @@ processCommand = async (message) => {
       break;
     case 'yt':
       await yt(voiceChannel, firstParam)
+      break;
+    case 'addsfx':
+      const commandName = args.shift();
+      await addSfx(message, firstParam, commandName);
       break;
     default:
       try {

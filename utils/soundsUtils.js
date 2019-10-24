@@ -35,5 +35,6 @@ module.exports = {
   getAvailableSounds,
   removeFileExtensions,
   formatFileNames,
-  readDirForPath
+  readDirForPath,
+  soundsPath
 }
