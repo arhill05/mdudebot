@@ -27,7 +27,11 @@ async function playSound(message, soundName, voiceChannel) {
 
 async function addCommandsToList() {
   let commandDescription =
-    `**Available Sound Effects**
+    `**Sound Effects**
+\`%soundName\` will play the given sound in the channel you are in
+\`%soundName -c General\` will play the given sound in channel "General"
+
+Sounds:
 ${(await soundsUtils.getAvailableSounds())
       .sort((a, b) => a.localeCompare(b))
       .reduce(soundsUtils.formatFileNames, [])}\n\n`
