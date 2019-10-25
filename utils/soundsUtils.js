@@ -13,7 +13,7 @@ function removeFileExtensions(fileName) {
 }
 
 function formatFileNames(previousValue, currentValue, index, array) {
-  const fileNameWithPrefix = `%${currentValue}`;
+  const fileNameWithPrefix = `\`%${currentValue}\``;
 
   const isLast = index === array.length - 1;
   if (!isLast) return `${previousValue}${fileNameWithPrefix}\n`

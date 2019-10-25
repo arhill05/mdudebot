@@ -8,7 +8,7 @@ function toLower(string) {
   return string.toLowerCase();
 }
 
-async function playSound (message, soundName, voiceChannel) {
+async function playSound(message, soundName, voiceChannel) {
   const availableSounds = (await soundsUtils.getAvailableSounds()).map(toLower);
   if (availableSounds.indexOf(soundName.toLowerCase()) < 0) throw new Error('Sound not found');
   let channel = voiceChannel ? voiceChannel : message.member.voice.channel;
@@ -21,8 +21,19 @@ async function playSound (message, soundName, voiceChannel) {
         connection.disconnect()
       });
     })
-    .catch(err => console.log(err));
+      .catch(err => console.log(err));
   }
 };
+
+async function addCommandsToList() {
+  let commandDescription =
+    `**Available Sound Effects**
+${(await soundsUtils.getAvailableSounds())
+      .sort((a, b) => a.localeCompare(b))
+      .reduce(soundsUtils.formatFileNames, [])}\n\n`
+  global.commandsList.push(commandDescription);
+}
+
+addCommandsToList();
 
 module.exports = playSound;

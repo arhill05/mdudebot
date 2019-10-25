@@ -28,4 +28,15 @@ async function addSfx(message, url, commandName) {
   }
 }
 
+function addCommandsToList() {
+  let commandDescription =
+    `**Add sound effects**
+\`%addsfx https://www.youtube.com/watch?v=AmUCLnN56f0 meep\`
+Lets you add a command by simply giving a Youtube URL and a name\n\n`;
+
+  global.commandsList.push(commandDescription);
+}
+
+addCommandsToList();
+
 module.exports = addSfx;

@@ -4,6 +4,7 @@ const config = require("./config.json");
 const axios = require("axios");
 const path = require('path');
 global.discordClient = client;
+global.commandsList = [];
 const yt = require('./commands/yt');
 const addSfx = require('./commands/addsfx');
 const sfx = require('./commands/sfx');

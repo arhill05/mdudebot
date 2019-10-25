@@ -14,4 +14,15 @@ async function yt(voiceChannel, url) {
   }
 }
 
+function addCommandsToList() {
+  let commandDescription =
+    `**Play audio from YouTube**
+\`%yt https://www.youtube.com/watch?v=AmUCLnN56f0\`
+Play the audio from a YouTube video\n\n`;
+
+  global.commandsList.push(commandDescription);
+}
+
+addCommandsToList();
+
 module.exports = yt;
