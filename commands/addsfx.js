@@ -1,8 +1,14 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core');
 const soundsUtils = require('../utils/soundsUtils');
+const kheruneId = '73233639424401408';
 
 async function addSfx(message, url, commandName) {
+  const isKherune = message.author.id === kheruneId;
+  if (isKherune) {
+    message.channel.send(`Kherune has abused his powers and lost the ability to add new sounds`);
+    return;
+  }
   const isValid = ytdl.validateURL(url);
   if (!isValid) {
     message.channel.send(`Hmm... looks like that url isn't a valid video.`);
