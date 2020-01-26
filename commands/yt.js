@@ -5,7 +5,7 @@ async function yt(voiceChannel, url) {
     const connection = await voiceChannel.join();
     const ytStream = ytdl(url);
 
-    const dispatcher = connection.play(ytStream);
+    const dispatcher = connection.play(ytStream, { volume: 0.5 });
 
     dispatcher.on('error', e => { throw new Error(e); })
     dispatcher.on('end', (reason) => {
