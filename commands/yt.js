@@ -3,12 +3,24 @@ const ytdl = require('ytdl-core');
 async function yt(voiceChannel, url) {
   if (voiceChannel && voiceChannel !== null) {
     const connection = await voiceChannel.join();
+
+    const splitUrl = url.split('?');
+
+    const params = new URLSearchParams(splitUrl[1]);
+    const timeParam = params.get('t') === null
+      ? null
+      : Number(params.get('t'));
+
     const ytStream = ytdl(url);
 
-    const dispatcher = connection.play(ytStream, { volume: 0.5 });
+    const dispatcher = connection.play(ytStream, { volume: 0.5, seek: timeParam });
 
-    dispatcher.on('error', e => { throw new Error(e); })
-    dispatcher.on('end', (reason) => {
+    dispatcher.on('debug', i => console.log(i));
+    dispatcher.on('error', e => {
+
+      throw new Error(e);
+    })
+    dispatcher.on('finish', (reason) => {
       connection.disconnect()
     });
   }
