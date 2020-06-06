@@ -48,7 +48,7 @@ processCommand = async (message) => {
       await list(message);
       break;
     case 'yt':
-      await yt(voiceChannel, firstParam)
+      await yt(voiceChannel, firstParam, message)
       break;
     case 'addsfx':
       const commandName = args.shift();

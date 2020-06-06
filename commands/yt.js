@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core');
 
-async function yt(voiceChannel, url) {
+async function yt(voiceChannel, url, message) {
   if (voiceChannel && voiceChannel !== null) {
     const connection = await voiceChannel.join();
 
@@ -11,18 +11,25 @@ async function yt(voiceChannel, url) {
       ? null
       : Number(params.get('t'));
 
+
+    const info = await ytdl.getBasicInfo(url);
     const ytStream = ytdl(url);
 
     const dispatcher = connection.play(ytStream, { volume: 0.5, seek: timeParam });
+    message.delete();
+    message.channel.send(`Now playing: "${info.videoDetails.title}" requested by <@${message.author.id}>`);
 
     dispatcher.on('debug', i => console.log(i));
     dispatcher.on('error', e => {
-
+      message.channel.send('Sorry, something went wrong when trying to play this video :(');
+      connection.disconnect();
       throw new Error(e);
     })
     dispatcher.on('finish', (reason) => {
       connection.disconnect()
     });
+  } else {
+    message.channel.send('You must be in a voice channel to play sound from a YouTube video!')
   }
 }
 
