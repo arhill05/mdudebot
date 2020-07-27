@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const soundsPath = (path.resolve(__dirname, '../sounds'));
+const configUtils = require('./configUtils');
 const config = require('../config.json');
 
 async function getAvailableSounds() {
@@ -31,10 +32,8 @@ function readDirForPath(directoryPath) {
 }
 
 function getVolume() {
-  return Number(config.volume) / 100;
+  return Number(configUtils.getConfigValue('volume')) / 100;
 }
-
-
 
 module.exports = {
   getAvailableSounds,

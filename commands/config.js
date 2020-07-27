@@ -3,7 +3,7 @@ const fs = require('fs');
 const client = global.discordClient;
 const soundsPath = (path.resolve(__dirname, '../sounds'));
 const soundsUtils = require('../utils/soundsUtils');
-const CONFIG_PATH = (path.resolve(__dirname, '../config.json'));
+const configUtils = require('../utils/configUtils');
 const LOWER_VOLUME_LIMIT = 0;
 const UPPER_VOLUME_LIMIT = 200;
 
@@ -32,11 +32,11 @@ function isValueValid(config, configValueToSet, newValue) {
 function handleSet(message, args) {
   const configValueToSet = args.shift();
   const newValue = args.shift();
-  const config = getConfigFromJson();
+  const config = configUtils.getConfigFromJson();
 
   if (isValueValid(config, configValueToSet, newValue)) {
     config[configValueToSet] = newValue;
-    writeConfigToJson(config);
+    configUtils.writeConfigToJson(config);
     message.channel.send(`${configValueToSet} set to ${newValue}`);
   } else {
     message.channel.send(`Invalid value for ${configValueToSet}!`);
@@ -45,23 +45,12 @@ function handleSet(message, args) {
 
 function handleGet(message, args) {
   const configValueToGet = args.shift();
-  const config = getConfigFromJson();
+  const config = configUtils.getConfigFromJson();
   if (!Object.keys(config).includes(configValueToGet)) {
     message.channel.send(`${configValueToGet} does not exist in the config`);
     return;
   }
   message.channel.send(`${configValueToGet}: ${config[configValueToGet]}`);
-}
-
-function getConfigFromJson() {
-  const rawData = fs.readFileSync(CONFIG_PATH);
-  const configObject = JSON.parse(rawData);
-  return configObject;
-}
-
-function writeConfigToJson(config) {
-  const configString = JSON.stringify(config);
-  fs.writeFileSync(CONFIG_PATH, configString);
 }
 
 async function addCommandsToList() {
