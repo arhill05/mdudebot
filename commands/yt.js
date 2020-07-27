@@ -17,7 +17,13 @@ async function yt(voiceChannel, url, message) {
 
     const dispatcher = connection.play(ytStream, { volume: 0.5, seek: timeParam });
     message.delete();
-    message.channel.send(`Now playing: "${info.videoDetails.title}" requested by <@${message.author.id}>`);
+
+    message.channel.send('', {
+      embed: {
+        title: `Now playing: "${info.videoDetails.title}"`,
+        description: `Requested by <@${message.author.id}>. \nLink: ${url}\nDuration: ${info.videoDetails.lengthSeconds}s`
+      }
+    });
 
     dispatcher.on('debug', i => console.log(i));
     dispatcher.on('error', e => {
