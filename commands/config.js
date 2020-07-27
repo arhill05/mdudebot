@@ -4,6 +4,9 @@ const client = global.discordClient;
 const soundsPath = (path.resolve(__dirname, '../sounds'));
 const soundsUtils = require('../utils/soundsUtils');
 const CONFIG_PATH = (path.resolve(__dirname, '../config.json'));
+const LOWER_VOLUME_LIMIT = 0;
+const UPPER_VOLUME_LIMIT = 200;
+
 
 async function config(message, firstParam, args) {
   if (firstParam && firstParam.toLowerCase() === 'set') {
@@ -22,7 +25,7 @@ function isValueValid(config, configValueToSet, newValue) {
 
   if (configValueToSet === 'volume') {
     const volumeAsNumber = Number(newValue);
-    return volumeAsNumber >= 0 && volumeAsNumber <= 200;
+    return volumeAsNumber >= LOWER_VOLUME_LIMIT && volumeAsNumber <= UPPER_VOLUME_LIMIT;
   }
 }
 
@@ -34,6 +37,7 @@ function handleSet(message, args) {
   if (isValueValid(config, configValueToSet, newValue)) {
     config[configValueToSet] = newValue;
     writeConfigToJson(config);
+    message.channel.send(`${configValueToSet} set to ${newValue}`);
   } else {
     message.channel.send(`Invalid value for ${configValueToSet}!`);
   }

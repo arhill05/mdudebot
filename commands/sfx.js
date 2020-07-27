@@ -15,7 +15,8 @@ async function playSound(message, soundName, voiceChannel) {
 
   if (channel && channel !== null) {
     channel.join().then(connection => {
-      const dispatcher = connection.play(`${soundsPath}/${soundName}.mp3`);
+      const volume = soundsUtils.getVolume();
+      const dispatcher = connection.play(`${soundsPath}/${soundName}.mp3`, {volume: volume});
       dispatcher.on('error', e => { throw new Error(e); })
       dispatcher.on('finish', (reason) => {
         connection.disconnect()
