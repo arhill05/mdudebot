@@ -5,9 +5,11 @@ const axios = require("axios");
 const path = require('path');
 global.discordClient = client;
 global.commandsList = [];
+
 const yt = require('./commands/yt');
 const addSfx = require('./commands/addsfx');
 const sfx = require('./commands/sfx');
+const configCommand = require('./commands/config');
 const disconnect = require('./commands/disconnect');
 const list = require('./commands/list');
 
@@ -53,6 +55,9 @@ processCommand = async (message) => {
     case 'addsfx':
       const commandName = args.shift();
       await addSfx(message, firstParam, commandName);
+      break;
+    case 'config':
+      await configCommand(message, firstParam, args);
       break;
     default:
       try {
