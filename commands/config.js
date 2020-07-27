@@ -1,12 +1,6 @@
-const path = require('path');
-const fs = require('fs');
-const client = global.discordClient;
-const soundsPath = (path.resolve(__dirname, '../sounds'));
-const soundsUtils = require('../utils/soundsUtils');
 const configUtils = require('../utils/configUtils');
 const LOWER_VOLUME_LIMIT = 0;
 const UPPER_VOLUME_LIMIT = 200;
-
 
 async function config(message, firstParam, args) {
   if (firstParam && firstParam.toLowerCase() === 'set') {
