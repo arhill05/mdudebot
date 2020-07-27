@@ -16,15 +16,13 @@ async function config(message, firstParam, args) {
 };
 
 function isValueValid(config, configValueToSet, newValue) {
-  console.log(config, configValueToSet, newValue);
   if (!Object.keys(config).includes(configValueToSet)) {
     return false;
   }
 
   if (configValueToSet === 'volume') {
-    console.log(config, configValueToSet, newValue);
     const volumeAsNumber = Number(newValue);
-    return volumeAsNumber >= 0 && volumeAsNumber <= 100;
+    return volumeAsNumber >= 0 && volumeAsNumber <= 200;
   }
 }
 
@@ -33,7 +31,6 @@ function handleSet(message, args) {
   const newValue = args.shift();
   const config = getConfigFromJson();
 
-  console.log(configValueToSet, newValue, config);
   if (isValueValid(config, configValueToSet, newValue)) {
     config[configValueToSet] = newValue;
     writeConfigToJson(config);
@@ -67,7 +64,7 @@ async function addCommandsToList() {
   let commandDescription =
     `**Config**
     \`%config\` allows you to get/set various settings.
-    \`%config set volume 100\` will set the volume of sounds played to 100%. Valid values are 0 - 100.
+    \`%config set volume 100\` will set the volume of sounds played to 100%. Valid values are 0 - 200.
     \`%config get volume\` will return the current volume level.
     `
   global.commandsList.push(commandDescription);

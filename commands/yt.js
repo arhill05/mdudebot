@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const config = require('../config.json');
 
 async function yt(voiceChannel, url, message) {
   if (voiceChannel && voiceChannel !== null) {
@@ -15,7 +16,8 @@ async function yt(voiceChannel, url, message) {
     const info = await ytdl.getBasicInfo(url);
     const ytStream = ytdl(url);
 
-    const dispatcher = connection.play(ytStream, { volume: 0.5, seek: timeParam });
+    const volume = Number(config.volume) / 100;
+    const dispatcher = connection.play(ytStream, { volume: volume, seek: timeParam });
     message.delete();
 
     message.channel.send('', {
