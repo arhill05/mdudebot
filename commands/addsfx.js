@@ -23,7 +23,11 @@ async function addSfx(message, url, commandName) {
 
   try {
     const soundsPath = soundsUtils.soundsPath;
-    ytdl(url)
+    ytdl(url, {
+      quality: "highestaudio",
+      highWaterMark: 1 << 25,
+      filter: "audioonly",
+    })
       .pipe(
         fs.createWriteStream(`${soundsPath}/${commandName}.mp3`)
       );

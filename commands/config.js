@@ -1,6 +1,6 @@
 const configUtils = require('../utils/configUtils');
 const LOWER_VOLUME_LIMIT = 0;
-const UPPER_VOLUME_LIMIT = 200;
+const UPPER_VOLUME_LIMIT = 500;
 
 async function config(message, firstParam, args) {
   if (firstParam && firstParam.toLowerCase() === 'set') {
@@ -13,6 +13,7 @@ async function config(message, firstParam, args) {
 };
 
 function isValueValid(config, configValueToSet, newValue) {
+  console.log(Object.keys(config));
   if (!Object.keys(config).includes(configValueToSet)) {
     return false;
   }
@@ -21,6 +22,8 @@ function isValueValid(config, configValueToSet, newValue) {
     const volumeAsNumber = Number(newValue);
     return volumeAsNumber >= LOWER_VOLUME_LIMIT && volumeAsNumber <= UPPER_VOLUME_LIMIT;
   }
+
+  return true;
 }
 
 function handleSet(message, args) {

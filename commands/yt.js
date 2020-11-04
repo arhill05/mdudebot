@@ -1,6 +1,12 @@
 const ytdl = require('ytdl-core');
 const soundsUtils = require('../utils/soundsUtils');
 
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 async function yt(voiceChannel, url, message) {
   if (voiceChannel && voiceChannel !== null) {
     const connection = await voiceChannel.join();
@@ -12,12 +18,32 @@ async function yt(voiceChannel, url, message) {
       ? null
       : Number(params.get('t'));
 
-
-    const info = await ytdl.getBasicInfo(url);
-    const ytStream = ytdl(url);
+    let info = {};
+    try {
+      info = await ytdl.getBasicInfo(url);
+    } catch (err) {
+      info = {
+        videoDetails: {
+          title: 'error getting info',
+          lengthSeconds: -1
+        }
+      }
+    }
 
     const volume = soundsUtils.getVolume();
-    const dispatcher = connection.play(ytStream, { volume: volume, seek: timeParam });
+
+    let options = { volume };
+    if (timeParam !== null) {
+      options = { ...options, seek: timeParam }
+    }
+
+    const ytStream = ytdl(url, {
+      quality: "highestaudio",
+      highWaterMark: 1 << 25,
+      filter: "audioonly",
+    })
+
+    const dispatcher = connection.play(ytStream, options);
     message.delete();
 
     message.channel.send('', {
@@ -31,6 +57,7 @@ async function yt(voiceChannel, url, message) {
     dispatcher.on('error', e => {
       message.channel.send('Sorry, something went wrong when trying to play this video :(');
       connection.disconnect();
+      console.log(e);
       throw new Error(e);
     })
     dispatcher.on('finish', (reason) => {

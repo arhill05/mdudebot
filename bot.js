@@ -13,8 +13,11 @@ const configCommand = require('./commands/config');
 const disconnect = require('./commands/disconnect');
 const list = require('./commands/list');
 
-sendErrorMessage = (message) => {
+sendErrorMessage = (message, err) => {
   message.channel.send('Something went wrong... sorry :(');
+  if (config.debug) {
+    message.channel.send(err.toString());
+  }
 }
 
 isMessageSentByClient = (message) => message.author.username === client.user.username;
@@ -83,7 +86,7 @@ client.on("message", async message => {
     }
   }
   catch (err) {
-    sendErrorMessage(message);
+    sendErrorMessage(message, err);
     console.error(err);
   }
 });
