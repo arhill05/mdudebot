@@ -12,6 +12,7 @@ const sfx = require('./commands/sfx');
 const configCommand = require('./commands/config');
 const disconnect = require('./commands/disconnect');
 const list = require('./commands/list');
+const removeSfx = require("./commands/removesfx");
 
 sendErrorMessage = (message, err) => {
   message.channel.send('Something went wrong... sorry :(');
@@ -56,9 +57,16 @@ processCommand = async (message) => {
       await yt(voiceChannel, firstParam, message)
       break;
     case 'addsfx':
-      const commandName = args.shift();
-      await addSfx(message, firstParam, commandName);
-      break;
+      {
+        const commandName = args.shift();
+        await addSfx(message, firstParam, commandName);
+        break;
+      }
+    case 'removesfx':
+      {
+        await removeSfx(message, firstParam);
+        break;
+      }
     case 'config':
       await configCommand(message, firstParam, args);
       break;

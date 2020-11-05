@@ -2,11 +2,11 @@ const path = require('path');
 const fs = require('fs');
 const soundsPath = (path.resolve(__dirname, '../sounds'));
 const configUtils = require('./configUtils');
-const config = require('../config.json');
 
 async function getAvailableSounds() {
   const fileNames = (await readDirForPath(soundsPath))
     .map(removeFileExtensions);
+
   return fileNames;
 }
 
