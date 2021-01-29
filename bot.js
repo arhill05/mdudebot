@@ -40,8 +40,9 @@ processCommand = async (message) => {
   const firstParam = args.shift();
 
   let voiceChannel = null;
-  if (firstParam === "-c")
-    voiceChannel = message.guild.channels.find("name", args.join(" "));
+  // if (firstParam === "-c") {
+  //   voiceChannel = message.channel.guild.channels.cache.find(channel => channel.name.toLowerCase() == args.join(" ").toLowerCase());
+  // }
 
   voiceChannel = voiceChannel ? voiceChannel : message.member.voice.channel;
 

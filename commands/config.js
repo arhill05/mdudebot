@@ -54,7 +54,7 @@ async function addCommandsToList() {
   let commandDescription =
     `**Config**
     \`%config\` allows you to get/set various settings.
-    \`%config set volume 100\` will set the volume of sounds played to 100%. Valid values are 0 - 200.
+    \`%config set volume 100\` will set the volume of sounds played to 100%. Valid values are ${LOWER_VOLUME_LIMIT} - ${UPPER_VOLUME_LIMIT}.
     \`%config get volume\` will return the current volume level.
     `
   global.commandsList.push(commandDescription);
