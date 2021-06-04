@@ -4,6 +4,32 @@ const client = global.discordClient;
 const soundsPath = (path.resolve(__dirname, '../sounds'));
 const soundsUtils = require('../utils/soundsUtils');
 
+const vibeSoundsList = [
+  'yoshi',
+  'tequila',
+  'shanty',
+  'powerhouse',
+  'jam',
+  'cancan',
+  'ed'
+]
+
+const vibeImageList = [
+  'https://giphy.com/gifs/Entropiqteam-entropiq-eiq-thisisourworld-wwjOcbKOfbDrChB2Ll',
+  'https://giphy.com/gifs/Verohallinto-verohallinto-epi-tax-guy-GY8VcK776YXPTqW9bA',
+  'https://giphy.com/gifs/reaction-laughing-lotr-TcdpZwYDPlWXC',
+  'https://giphy.com/gifs/tolivealie-head-nod-headbob-scottmcinturf-WS2f4jy5pwHA6oX1Im',
+  'https://giphy.com/gifs/snl-saturday-night-live-2000s-3oz8xGza5bsnvxZOBW',
+  'https://giphy.com/gifs/hyperrpg-headbang-hyper-rpg-3ohzdKAUplR8k1Q4De',
+  'https://giphy.com/gifs/emote-catjam-jpbnoe3UIa8TU8LM13',
+  'https://giphy.com/gifs/wayne-waynes-world-mike-myers-PqwqtOLfG19Ti',
+];
+
+function pickRandomFromArray(array) {
+  const random = Math.floor(Math.random() * array.length);
+  return array[random];
+}
+
 function toLower(string) {
   return string.toLowerCase();
 }
@@ -16,11 +42,16 @@ async function playSound(message, soundName, voiceChannel) {
   if (channel && channel !== null) {
     channel.join().then(connection => {
       const volume = soundsUtils.getVolume();
-      const dispatcher = connection.play(`${soundsPath}/${soundName}.mp3`, {volume: volume});
+      const dispatcher = connection.play(`${soundsPath}/${soundName}.mp3`, { volume: volume });
       dispatcher.on('error', e => { throw new Error(e); })
       dispatcher.on('finish', (reason) => {
         connection.disconnect()
       });
+
+      if (vibeSoundsList.includes(soundName)) {
+        const imageLink = pickRandomFromArray(vibeImageList);
+        message.channel.send(imageLink);
+      }
     })
       .catch(err => console.log(err));
   }
