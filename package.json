@@ -14,7 +14,7 @@
     "@discordjs/opus": "^0.3.3",
     "axios": "^0.19.2",
     "discord.js": "12.2.0",
-    "ffmpeg-static": "^4.2.7",
-    "ytdl-core": "^4.8.2"
+    "ffmpeg-static": "^4.4.1",
+    "ytdl-core": "^4.10.1"
   }
 }
