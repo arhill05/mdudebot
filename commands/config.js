@@ -5,7 +5,7 @@ const UPPER_VOLUME_LIMIT = 500;
 async function config(message, firstParam, args) {
   if (firstParam && firstParam.toLowerCase() === 'set') {
     handleSet(message, args);
-  } else if (firstParam && firstParam.toLowerCase() === 'get'){
+  } else if (firstParam && firstParam.toLowerCase() === 'get') {
     handleGet(message, args);
   } else {
     message.channel.send('Not a valid config command!');
@@ -57,7 +57,7 @@ async function addCommandsToList() {
     \`%config set volume 100\` will set the volume of sounds played to 100%. Valid values are ${LOWER_VOLUME_LIMIT} - ${UPPER_VOLUME_LIMIT}.
     \`%config get volume\` will return the current volume level.
     `
-  global.commandsList.push(commandDescription);
+  global.commandsList.push({ id: 'config', commandDescription });
 }
 
 addCommandsToList();

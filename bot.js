@@ -73,7 +73,7 @@ processCommand = async (message) => {
       break;
     default:
       try {
-        await sfx(message, command, voiceChannel);
+        await sfx.playSound(message, command, voiceChannel);
       } catch (err) {
         if (err.message.toLowerCase() === 'sound not found')
           message.channel.send(`I didn't recognize command '${command}'. Sorry!`);

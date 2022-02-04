@@ -1,5 +1,6 @@
 const fs = require('fs');
 const ytdl = require('ytdl-core');
+const sfx = require('./sfx');
 const soundsUtils = require('../utils/soundsUtils');
 const kheruneId = '73233639424401408';
 
@@ -31,6 +32,8 @@ async function addSfx(message, url, commandName) {
       .pipe(
         fs.createWriteStream(`${soundsPath}/${commandName}.mp3`)
       );
+
+      await sfx.updateSoundsListInGlobalCommands()
     message.channel.send(`Successfully added command '${commandName}'!`);
   }
   catch (err) {
@@ -44,7 +47,7 @@ function addCommandsToList() {
 \`%addsfx https://www.youtube.com/watch?v=AmUCLnN56f0 meep\`
 Lets you add a command by simply giving a Youtube URL and a name\n\n`;
 
-  global.commandsList.push(commandDescription);
+  global.commandsList.push({ id: 'addsfx', commandDescription });
 }
 
 addCommandsToList();

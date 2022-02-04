@@ -1,8 +1,6 @@
-const commandsList = global.commandsList;
-
 async function getFormattedSoundsList() {
   let list = "Here is a list of all of the available commands:\n";
-  list += commandsList.join('');
+  list += global.commandsList.map(c => c.commandDescription).join('');
   return list;
 }
 

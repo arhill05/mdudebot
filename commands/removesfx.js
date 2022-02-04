@@ -1,5 +1,5 @@
 const fs = require('fs');
-const ytdl = require('ytdl-core');
+const sfx = require('./sfx');
 const soundsUtils = require('../utils/soundsUtils');
 
 async function removeSfx(message, commandName) {
@@ -14,6 +14,7 @@ async function removeSfx(message, commandName) {
     const soundsPath = soundsUtils.soundsPath;
     const filePath = `${soundsPath}/${commandName}.mp3`;
     fs.unlinkSync(filePath);
+    await sfx.updateSoundsListInGlobalCommands();
     message.channel.send(`Successfully removed command '${commandName}'!`);
   }
   catch (err) {
@@ -27,7 +28,7 @@ function addCommandsToList() {
 \`%removesfx meep\`
 Remove a sound effect with the given name\n\n`;
 
-  global.commandsList.push(commandDescription);
+  global.commandsList.push({ id: 'removeSfx', commandDescription });
 }
 
 addCommandsToList();
